@@ -1,0 +1,74 @@
+import heapq
+
+GOAL_STATE = (1, 2, 3, 4, 5, 6, 7, 8, 0)
+
+def h_misplaced(state):
+    count = 0
+    for i in range(9):
+        if state[i] != 0 and state[i] != GOAL_STATE[i]:
+            count += 1
+    return count
+
+def get_neighbors(state):
+    neighbors = []
+    idx = state.index(0)
+    row, col = idx // 3, idx % 3
+    
+    moves = []
+    if row > 0: moves.append(-3) 
+    if row < 2: moves.append(3)   
+    if col > 0: moves.append(-1)  
+    if col < 2: moves.append(1)  
+    
+    for move in moves:
+        new_idx = idx + move
+        new_state = list(state)
+        new_state[idx], new_state[new_idx] = new_state[new_idx], new_state[idx]
+        neighbors.append(tuple(new_state))
+        
+    return neighbors
+
+def a_star_misplaced(start_state):
+    open_set = []
+    heapq.heappush(open_set, (h_misplaced(start_state), 0, start_state, [start_state]))
+    
+    visited = set()
+    
+    while open_set:
+        f, g, current, path = heapq.heappop(open_set)
+        
+        if current == GOAL_STATE:
+            return path, g
+            
+        if current in visited:
+            continue
+        visited.add(current)
+        
+        for neighbor in get_neighbors(current):
+            if neighbor not in visited:
+                new_g = g + 1 
+                new_h = h_misplaced(neighbor)
+                new_f = new_g + new_h
+                heapq.heappush(open_set, (new_f, new_g, neighbor, path + [neighbor]))
+                
+    return None, -1
+
+def print_puzzle(state):
+    for i in range(0, 9, 3):
+        print(list(state[i:i+3]))
+    print()
+
+if __name__ == "__main__":
+    initial_state = (1, 2, 3, 0, 4, 6, 7, 5, 8) 
+    
+    print("--- CASE 1: MISPLACED TILES ---")
+    print("Initial State:")
+    print_puzzle(initial_state)
+    
+    path, moves = a_star_misplaced(initial_state)
+    print(f"Goal reached in {moves} moves!\n")
+    
+    print("Step-by-step path:")
+    for step, state in enumerate(path):
+        print(f"Step {step}:")
+        print_puzzle(state)
