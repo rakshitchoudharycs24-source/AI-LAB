@@ -1,0 +1,61 @@
+board = [" "] * 9
+wins = [(0,1,2), (3,4,5), (6,7,8), (0,3,6), (1,4,7), (2,5,8), (0,4,8), (2,4,6)]
+
+for turn in range(9):
+    print(f"{board[0]}|{board[1]}|{board[2]}\n-+-+-\n{board[3]}|{board[4]}|{board[5]}\n-+-+-\n{board[6]}|{board[7]}|{board[8]}")
+    
+    player = "O" if turn % 2 else "X"
+    move = int(input(f"Player {player} (1-9): ")) - 1
+    
+    if board[move] == " ":
+        board[move] = player
+    else:
+        print("Taken!"); continue
+        
+    if any(board[a] == board[b] == board[c] != " " for a, b, c in wins):
+        print(f"Player {player} wins!")
+        break
+else:
+    print("It's a draw!")
+
+
+
+OUTPUT - 
+
+ | | 
+-+-+-
+ | | 
+-+-+-
+ | | 
+Player X (1-9): 2
+ |X| 
+-+-+-
+ | | 
+-+-+-
+ | | 
+Player O (1-9): 3
+ |X|O
+-+-+-
+ | | 
+-+-+-
+ | | 
+Player X (1-9): 1
+X|X|O
+-+-+-
+ | | 
+-+-+-
+ | | 
+Player O (1-9): 6
+X|X|O
+-+-+-
+ | |O
+-+-+-
+ | | 
+Player X (1-9): 4
+X|X|O
+-+-+-
+X| |O
+-+-+-
+ | | 
+Player O (1-9): 9
+Player O wins!
