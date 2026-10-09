@@ -1,0 +1,37 @@
+def reflex_agent(room, status):
+    return "SUCK" if status == "Dirty" else ("MOVE_B" if room == "A" else "MOVE_A")
+
+print("--- Reflex Agent ---")
+env = {"A": "Dirty", "B": "Dirty"}
+loc = "A"
+for _ in range(4):
+    act = reflex_agent(loc, env[loc])
+    print(f"Room {loc} ({env[loc]}) -> Action: {act}")
+    if act == "SUCK": env[loc] = "Clean"
+    else: loc = "B" if act == "MOVE_B" else "A"
+
+
+def goal_agent(env):
+    print("\n--- Goal-Based Agent ---")
+    while "Dirty" in env.values(): 
+        for room in env:
+            if env[room] == "Dirty":
+                print(f"Cleaning Room {room} to achieve goal...")
+                env[room] = "Clean"
+    print("Goal Achieved:", env)
+
+goal_agent({"A": "Dirty", "B": "Dirty"})
+
+
+OUTPUT :
+
+--- Reflex Agent ---
+Room A (Dirty) -> Action: SUCK
+Room A (Clean) -> Action: MOVE_B
+Room B (Dirty) -> Action: SUCK
+Room B (Clean) -> Action: MOVE_A
+
+--- Goal-Based Agent ---
+Cleaning Room A to achieve goal...
+Cleaning Room B to achieve goal...
+Goal Achieved: {'A': 'Clean', 'B': 'Clean'}
