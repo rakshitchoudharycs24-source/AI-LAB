@@ -1,0 +1,35 @@
+import random
+import math
+
+def conflicts(board):
+    count = 0
+    for i in range(8):
+        for j in range(i + 1, 8):
+            if abs(board[i] - board[j]) == abs(i - j):
+                count += 1
+    return count
+
+board = random.sample(range(8), 8)
+T = 100
+
+while T > 0:
+    if conflicts(board) == 0:
+        break
+
+    new_board = board[:]
+    col = random.randint(0, 7)
+    new_board[col] = random.randint(0, 7)
+
+    delta = conflicts(new_board) - conflicts(board)
+
+    if delta < 0 or random.random() < math.exp(-delta / T):
+        board = new_board
+
+    T *= 0.95
+
+print("Board:", board)
+print("Conflicts:", conflicts(board))
+
+
+OUTPUT - Board: [1, 6, 6, 6, 2, 0, 6, 4]
+         Conflicts: 0
