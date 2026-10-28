@@ -1,0 +1,35 @@
+import random
+
+def cost(board):
+    c = 0
+    for i in range(8):
+        for j in range(i + 1, 8):
+            if abs(board[i] - board[j]) == abs(i - j):
+                c += 1
+    return c
+
+def hill_climbing():
+    current = [random.randint(0, 7) for i in range(8)]
+
+    while cost(current) > 0:
+        best = current[:]
+
+        for i in range(8):
+            for j in range(8):
+                neighbor = current[:]
+                neighbor[i] = j
+
+                if cost(neighbor) < cost(best):
+                    best = neighbor
+
+        if cost(best) >= cost(current):
+            return "Local optimum reached"
+
+        current = best
+
+    return current
+
+print(hill_climbing())
+
+
+OUTPUT - [7, 0, 0, 3, 1, 7, 7, 1]
