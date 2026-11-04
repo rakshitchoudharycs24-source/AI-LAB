@@ -1,0 +1,64 @@
+
+from itertools import product
+
+# Evaluate Knowledge Base
+def PL_TRUE_KB(P, Q, R):
+    return (not P or Q) and (not Q or R)
+
+# Evaluate Query
+def PL_TRUE_Query(P, Q, R):
+    return not P or R
+
+# Truth Table Enumeration Algorithm
+def TT_ENTAILS():
+
+    symbols = ['P', 'Q', 'R']
+
+    print("P Q R | P->Q | Q->R | KB | P->R")
+    print("-----------------------------------")
+
+    for values in product([True, False], repeat=3):
+
+        P, Q, R = values
+
+        p_q = not P or Q
+        q_r = not Q or R
+
+        KB = PL_TRUE_KB(P, Q, R)
+        alpha = PL_TRUE_Query(P, Q, R)
+
+        print(
+            f"{str(P)[0]} {str(Q)[0]} {str(R)[0]} |"
+            f"  {str(p_q)[0]}  |"
+            f"  {str(q_r)[0]}  |"
+            f" {str(KB)[0]} |"
+            f"  {str(alpha)[0]}"
+        )
+
+        # Check entailment
+        if KB and not alpha:
+            print("\nKB does not entail Query")
+            return False
+
+    print("\nKB entails Query")
+    return True
+
+
+# Main Program
+TT_ENTAILS()
+
+
+OUTPUT -
+
+P Q R | P->Q | Q->R | KB | P->R
+-----------------------------------
+T T T |  T  |  T  | T |  T
+T T F |  T  |  F  | F |  F
+T F T |  F  |  T  | F |  T
+T F F |  F  |  T  | F |  F
+F T T |  T  |  T  | T |  T
+F T F |  T  |  F  | F |  T
+F F T |  T  |  T  | T |  T
+F F F |  T  |  T  | T |  T
+
+KB entails Query
