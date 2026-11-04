@@ -1,0 +1,86 @@
+def is_variable(x):
+    return isinstance(x, str) and x.islower() and x.isalpha()
+
+
+def occurs_check(var, expr, subst):
+    expr = apply_substitution(expr, subst)
+
+    if var == expr:
+        return True
+
+    if isinstance(expr, tuple):
+        return any(occurs_check(var, arg, subst) for arg in expr[1])
+
+    return False
+
+
+def apply_substitution(expr, subst):
+    if isinstance(expr, str) and expr in subst:
+        return apply_substitution(subst[expr], subst)
+
+    if isinstance(expr, tuple):
+        return (expr[0],
+                tuple(apply_substitution(arg, subst)
+                      for arg in expr[1]))
+
+    return expr
+
+
+def unify(x, y, subst=None):
+    if subst is None:
+        subst = {}
+
+    x = apply_substitution(x, subst)
+    y = apply_substitution(y, subst)
+
+    if x == y:
+        return subst
+
+    if is_variable(x):
+        if occurs_check(x, y, subst):
+            return None
+        subst[x] = y
+        return subst
+
+    if is_variable(y):
+        return unify(y, x, subst)
+
+    if isinstance(x, str) and isinstance(y, str):
+        return None
+
+    if isinstance(x, tuple) and isinstance(y, tuple):
+
+        if x[0] != y[0]:
+            return None
+
+        if len(x[1]) != len(y[1]):
+            return None
+
+        for a, b in zip(x[1], y[1]):
+            subst = unify(a, b, subst)
+
+            if subst is None:
+                return None
+
+        return subst
+
+    return None
+
+
+
+expr1 = ("P", ("x", ("f", ("y",))))
+expr2 = ("P", ("a", ("f", ("b",))))
+
+result = unify(expr1, expr2)
+
+if result is not None:
+    print("Unification Successful!")
+    print("Most General Unifier (MGU):", result)
+else:
+    print("Unification Failed!")
+
+
+OUTPUT - 
+
+Unification Successful!
+Most General Unifier (MGU): {'x': 'a', 'y': 'b'}
