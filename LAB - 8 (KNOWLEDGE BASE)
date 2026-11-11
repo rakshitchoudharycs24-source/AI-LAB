@@ -1,0 +1,30 @@
+facts = {"Human(Socrates)"}
+
+rules = {
+    "Human(x)": "Mortal(x)"
+}
+
+query = "Mortal(Socrates)"
+
+print("Initial Facts:", facts)
+
+for fact in list(facts):
+    if fact.startswith("Human("):
+        person = fact[6:-1]
+        new_fact = "Mortal(" + person + ")"
+        facts.add(new_fact)
+        print("Derived:", new_fact)
+
+
+if query in facts:
+    print("\nQuery Proved:", query)
+else:
+    print("\nQuery Not Proved")
+
+OUTPUT - 
+
+Initial Facts: {'Human(Socrates)'}
+Derived: Mortal(Socrates)
+
+Query Proved: Mortal(Socrates)
+
