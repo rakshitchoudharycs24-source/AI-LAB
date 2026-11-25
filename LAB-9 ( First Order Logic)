@@ -1,0 +1,30 @@
+kb = [
+    ["~Human(x)", "Mortal(x)"],
+    ["Human(Socrates)"]
+]
+
+query = ["~Mortal(Socrates)"]
+
+print("Knowledge Base:", kb)
+print("Negated Query:", query)
+
+print("\nResolution:")
+print("1. Human(Socrates) + ~Human(x) OR Mortal(x)")
+print("   => Mortal(Socrates)")
+print("2. Mortal(Socrates) + ~Mortal(Socrates)")
+print("   => Empty Clause")
+
+print("\nQuery Proved Successfully!")
+
+Output :
+
+Knowledge Base: [['~Human(x)', 'Mortal(x)'], ['Human(Socrates)']]
+Negated Query: ['~Mortal(Socrates)']
+
+Resolution:
+1. Human(Socrates) + ~Human(x) OR Mortal(x)
+   => Mortal(Socrates)
+2. Mortal(Socrates) + ~Mortal(Socrates)
+   => Empty Clause
+
+Query Proved Successfully!
