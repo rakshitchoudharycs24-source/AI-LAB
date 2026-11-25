@@ -1,0 +1,41 @@
+def alphabeta(node, depth, alpha, beta, maximizing):
+    if depth == 2:
+        return tree[node]
+
+    if maximizing:
+        best = -999
+        for i in range(2):
+            val = alphabeta(node * 2 + i, depth + 1,
+                            alpha, beta, False)
+            best = max(best, val)
+            alpha = max(alpha, best)
+
+            if alpha >= beta:
+                print("Pruned subtree")
+                break
+        return best
+
+    else:
+        best = 999
+        for i in range(2):
+            val = alphabeta(node * 2 + i, depth + 1,
+                            alpha, beta, True)
+            best = min(best, val)
+            beta = min(beta, best)
+
+            if alpha >= beta:
+                print("Pruned subtree")
+                break
+        return best
+
+
+tree = [3, 5, 2, 9]
+
+result = alphabeta(0, 0, -999, 999, True)
+
+print("Final MAX value:", result)
+
+OUTPUT - 
+
+Pruned subtree
+Final MAX value: 3
